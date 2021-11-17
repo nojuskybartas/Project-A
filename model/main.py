@@ -107,6 +107,6 @@ df = prep_df(DATA_FILENAME)
 
 _, _, X_train, X_test, y_train, y_test = prepare_data(df, window_len=WINDOW_LEN, zero_base=ZERO_BASE, test_size=TEST_SIZE)
 
-#model = train_the_model(1, BATCH_SIZE, WINDOW_LEN, LSTM_NEURONS, LOSS, DROPOUT, OPTIMIZER, X_train, y_train, graph=False) 
+model = train_the_model(EPOCHS, BATCH_SIZE, WINDOW_LEN, LSTM_NEURONS, LOSS, DROPOUT, OPTIMIZER, X_train, y_train, graph=False) 
 
 test_the_model('100 epochs 1000 neurons', 10)
