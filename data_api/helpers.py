@@ -3,11 +3,12 @@ import pickle
 from os.path import isfile
 import vectorbt as vbt
 from strategies import MinimumStrategy
+import os
 
 
 def load_price_data(start, end, symbol):
     # get data from yahoo finance (or locally if we requested it before)
-    filename = f"../data/{symbol}_{start.replace(' ', '_')}{end.replace(' ', '_')}.data"
+    filename = os.path.join('data', f"{symbol}_{start.replace(' ', '_')}{end.replace(' ', '_')}.data")
 
     if isfile(filename):
         logging.info("loading local data")

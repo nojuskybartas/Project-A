@@ -12,7 +12,7 @@ assert pd and pandas_ta and yfinance
 logging.getLogger().setLevel(logging.INFO)
 
 # get our data
-price_data = helpers.load_price_data('2016-01-01 UTC', '2021-11-07 UTC', 'ETH-USD')
+price_data = helpers.load_price_data('2021-11-07 UTC', '2021-11-24 UTC', 'ETH-USD')
 
 # now there are 2 paths: pandas, and vectorbt
 # vectorbt actually uses pandas in the background, and is a more powerful library in many ways
