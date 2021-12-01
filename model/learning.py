@@ -13,15 +13,15 @@ import numpy as np
 # Save model weights
 checkpointer = ModelCheckpoint(filepath="eth_pred_model_weights.hdf5", verbose=1, save_best_only=False)
 # Use early stopping to exit training if validation loss is not decreasing even after certain epochs (patience)
-earlystopping = EarlyStopping(monitor='loss', mode='min', verbose=1, patience=5)
+earlystopping = EarlyStopping(monitor='loss', mode='min', verbose=1, patience=7)
 
 metrics = [checkpointer, earlystopping]
 
 
-def build_lstm_model(window_len, output_size, neurons=100, activ_func='linear', dropout=0.2, loss='mse', optimizer='adam'):
+def build_lstm_model(window_len, input_columns, output_size, neurons=3000, activ_func='linear', dropout=0.2, loss='mse', optimizer='adam'):
     model = Sequential()
     # model.add(Embedding(window_len, 512))
-    model.add(GRU(3000, input_shape =(window_len, 1)))
+    model.add(GRU(neurons, input_shape =(window_len, input_columns)))
     model.add(Dense(1024, activation='relu'))
     model.add(Dropout(dropout))
     model.add(Dense(512, activation='relu'))
