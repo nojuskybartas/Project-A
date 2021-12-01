@@ -15,15 +15,15 @@ DATA_FILENAME = 'data/ETH-USD_2016-01-01_UTC2021-11-07_UTC.data'
 DATA_FILENAME_TEST = 'data/ETH-USD_2021-11-07_UTC2021-11-24_UTC.data'
 assert(isfile(DATA_FILENAME))
 np.random.seed(42)
-WINDOW_LEN = 28
+WINDOW_LEN = 7
 INPUT_COLUMNS = 3 # columns in the dataframe used for training
-TEST_SIZE = 0.1
+TEST_SIZE = 0.15
 ZERO_BASE = False
-GRU_NEURONS = 4096
+GRU_NEURONS = 3200
 EPOCHS = 250 # big number, because we have earlystopping
-BATCH_SIZE = 64
+BATCH_SIZE = 32
 LOSS = 'mse'
-DROPOUT = 0.1
+DROPOUT = 0.2
 OPTIMIZER = 'adam'
 
 
@@ -72,7 +72,8 @@ def test_the_model(model_folder, max_size, graph=True):
     print(colored(f'Running tests on {max_size} samples', 'green'))
     preds = model.predict(X_test[:max_size])
 
-    print(colored(preds, 'orange'))
+    print(colored(preds, (30, 80, 80)))
+    
     if graph:
         line_plot(y_test[:max_size], preds, 'training', 'test', title='ETH price prediction')
     return preds
@@ -89,4 +90,4 @@ if __name__=='__main__':
 
     model = train_the_model(EPOCHS, BATCH_SIZE, WINDOW_LEN, INPUT_COLUMNS, GRU_NEURONS, LOSS, DROPOUT, OPTIMIZER, X_train, y_train, graph=True) 
 
-    test_the_model('dense badboi v4', 200)
+    # test_the_model('dense badboi v4', 200)
