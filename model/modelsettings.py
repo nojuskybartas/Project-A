@@ -24,5 +24,5 @@ class ModelSettings:
         assert(isfile(self.DATA_FILENAME) and isfile(self.DATA_FILENAME_TEST))
 
 
-gru_bigboi3_settings = ModelSettings(WINDOW_LEN=14, INPUT_COLUMNS=1, TEST_SIZE=0.15, ZERO_BASE=False, GRU_NEURONS=3200,
+gru_bigboi3_settings = ModelSettings(WINDOW_LEN=14, INPUT_COLUMNS=1, TEST_SIZE=0.1, ZERO_BASE=False, GRU_NEURONS=3000,
                                      EPOCHS=250, BATCH_SIZE=32, LOSS='mse', DROPOUT=0.2, OPTIMIZER='adam')

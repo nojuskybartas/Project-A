@@ -35,7 +35,7 @@ def line_plot(line1, line2, label1=None, label2=None, title='', lw=2):
 
 def train_the_model(epochs, batch_size, window_len, input_columns, lstm_neurons, loss, dropout, optimizer,
                     data=None, graph=True, summary=True):
-    from learning import build_neural_model, model_metrics
+    from model.learning import build_neural_model, model_metrics
     model_folder = input(colored('Describe the model: ', 'green'))
     path = os.path.join('trained_models', model_folder)
 
@@ -69,8 +69,8 @@ def test_the_model(model_folder, max_size, data=None, graph=True):
     from model.learning import load_model
     if not data:
         data = DataContainer(gru_bigboi3_settings)
-
-    logging.info(f'Loading model {model_folder}')
+        
+    logging.info(colored(f'Loading model {model_folder}', 'green'))
     model = load_model(model_folder, data.config.OPTIMIZER, data.config.LOSS)
     max_size = len(data.x_test) if max_size > len(data.x_test) else max_size
     logging.info(colored(f'Running tests on {max_size} samples', 'green'))
@@ -90,6 +90,7 @@ if __name__ == '__main__':
     print(m_data.y_train[:3])
 
     c = m_data.config
-    the_model = train_the_model(c.EPOCHS, c.BATCH_SIZE, c.WINDOW_LEN, c.INPUT_COLUMNS,
-                                c.GRU_NEURONS, c.LOSS, c.DROPOUT, c.OPTIMIZER, data=m_data, graph=True)
-    # test_the_model('dense badboi v4', 200, data=m_data)
+    # the_model = train_the_model(c.EPOCHS, c.BATCH_SIZE, c.WINDOW_LEN, c.INPUT_COLUMNS,
+    #                             c.GRU_NEURONS, c.LOSS, c.DROPOUT, c.OPTIMIZER, data=m_data, graph=True)
+    
+    test_the_model('dense badboi v3', 200, data=m_data)

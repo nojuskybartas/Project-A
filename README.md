@@ -15,7 +15,7 @@ Note this work is very rough, there is a lot to improve.
 
 # Summary
 
-the main function is under model/main.py
+the main function is main.py
 
 at the bottom of main.py you can choose whether you want to train, or test a trained model. 
 
