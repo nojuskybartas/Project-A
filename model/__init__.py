@@ -4,6 +4,8 @@ import shutil
 import numpy as np
 import matplotlib.pyplot as plt
 from os.path import isdir
+
+import pandas as pd
 from termcolor import colored
 
 from model.modelsettings import ModelSettings, gru_bigboi3_settings
@@ -19,7 +21,7 @@ class DataContainer:
         if not data_filename:
             data_filename = config.DATA_FILENAME
         self.dataframe = DataFrame(data_filename)
-        _, _, self.x_train, self.x_test, self.y_train, self.y_test = \
+        self.train_data, self.test_data, self.x_train, self.x_test, self.y_train, self.y_test = \
             self.dataframe.prepare_data(config.WINDOW_LEN, config.ZERO_BASE, config.TEST_SIZE)
 
 
@@ -35,7 +37,7 @@ def line_plot(line1, line2, label1=None, label2=None, title='', lw=2):
 
 def train_the_model(epochs, batch_size, window_len, input_columns, lstm_neurons, loss, dropout, optimizer,
                     data=None, graph=True, summary=True):
-    from learning import build_neural_model, model_metrics
+    from model.learning import build_neural_model, model_metrics
     model_folder = input(colored('Describe the model: ', 'green'))
     path = os.path.join('trained_models', model_folder)
 
@@ -65,20 +67,23 @@ def train_the_model(epochs, batch_size, window_len, input_columns, lstm_neurons,
     return model
 
 
-def test_the_model(model_folder, max_size, data=None, graph=True):
+def test_the_model(model_folder, max_size, data: DataContainer = None, graph=True):
     from model.learning import load_model
     if not data:
-        data = DataContainer(gru_bigboi3_settings)
+        data: DataContainer = DataContainer(gru_bigboi3_settings)
 
-    logging.info(f'Loading model {model_folder}')
+    logging.info(colored(f'Loading model {model_folder}', 'green'))
     model = load_model(model_folder, data.config.OPTIMIZER, data.config.LOSS)
     max_size = len(data.x_test) if max_size > len(data.x_test) else max_size
     logging.info(colored(f'Running tests on {max_size} samples', 'green'))
 
     preds = model.predict(data.x_test[:max_size])
+    predictions_with_dates = pd.DataFrame(data=preds, index=data.test_data.index[:max_size])
+    y_test_with_dates = pd.DataFrame(data=data.y_test[:max_size], index=data.test_data.index[:max_size])
+
     if graph:
-        line_plot(data.y_test[:max_size], preds, 'training', 'test', title='ETH price prediction')
-    return preds
+        line_plot(y_test_with_dates, predictions_with_dates, 'test_data', 'prediction',  title='ETH price prediction')
+    return predictions_with_dates, y_test_with_dates, data
 
 
 if __name__ == '__main__':

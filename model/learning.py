@@ -1,7 +1,7 @@
-# some python versions fail to load the path variables, so we're doing it manually here before importing tensorflow
 import os
 
 try:
+    # some python versions fail to load the path variables, so we're doing it manually here before importing tensorflow
     loaddir = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.2/bin"
     os.add_dll_directory(loaddir)
 except FileNotFoundError as e:

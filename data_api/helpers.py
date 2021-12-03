@@ -2,7 +2,7 @@ import logging
 import pickle
 from os.path import isfile
 import vectorbt as vbt
-from strategies import MinimumStrategy
+from data_api.strategies import MinimumStrategy
 import os
 
 

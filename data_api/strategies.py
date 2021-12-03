@@ -7,9 +7,9 @@ import vectorbt as vbt
 @dataclass
 class MinimumStrategy:
     price: Any
-    portfolio: Any = None
     entries: Any = None
     exits: Any = None
+    portfolio: Any = None
 
     def __str__(self):
         returns = self.portfolio.total_return() if self.portfolio else "Not Available"
@@ -19,7 +19,7 @@ class MinimumStrategy:
 @dataclass
 class HoldingStrategy(MinimumStrategy):
     def __post_init__(self):
-        self.portfolio = vbt.Portfolio.from_holding(self.price)
+        self.portfolio = vbt.Portfolio.from_holding(self.price, init_cash=100)
 
 
 @dataclass
@@ -29,7 +29,7 @@ class MaCrossoverStrategy(MinimumStrategy):
         slow_ma = vbt.MA.run(self.price, 20, short_name='slow')
         self.entries = fast_ma.ma_above(slow_ma, crossover=True)
         self.exits = fast_ma.ma_below(slow_ma, crossover=True)
-        self.portfolio = vbt.Portfolio.from_signals(self.price, self.entries, self.exits)
+        self.portfolio = vbt.Portfolio.from_signals(self.price, self.entries, self.exits, init_cash=100)
 
 
 @dataclass
@@ -40,4 +40,11 @@ class RsiStrategy(MinimumStrategy):
         entries = self.portfolio.rsi_below(30, crossover=False, wait=1)
         exits = self.portfolio.rsi_above(90, crossover=False, wait=50)
         self.entries, self.exits = pd.DataFrame.vbt.signals.clean(entries, exits)
-        self.portfolio = vbt.Portfolio.from_signals(self.price, self.entries, self.exits)
+        self.portfolio = vbt.Portfolio.from_signals(self.price, self.entries, self.exits, init_cash=100)
+
+
+@dataclass
+class NeuralStrategy(MinimumStrategy):
+    def __post_init__(self):
+        self.portfolio = vbt.Portfolio.from_signals(self.price, self.entries, self.exits,
+                                                    init_cash=100, direction='both', size=1)
