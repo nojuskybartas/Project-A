@@ -2,8 +2,10 @@ import logging
 import pickle
 from os.path import isfile
 import vectorbt as vbt
-from data_api.strategies import MinimumStrategy
+from cryptocomp.strategies import MinimumStrategy
 import os
+
+from model import ModelSettings
 
 
 def load_price_data(start, end, symbol):
@@ -11,11 +13,11 @@ def load_price_data(start, end, symbol):
     filename = os.path.join('data', f"{symbol}_{start.replace(' ', '_')}{end.replace(' ', '_')}.data")
 
     if isfile(filename):
-        logging.info("loading local data")
+        logging.info("loading local price data")
         with open(filename, 'rb') as f:
             return pickle.load(f)
     else:
-        logging.info("requesting api")
+        logging.info("requesting api for price data")
         # possibilities: cols = ['Open', 'High', 'Low', 'Close', 'Volume']
         data = vbt.YFData.download(symbol, start=start, end=end, cols=['Close']).get('Close')
         with open(filename, 'wb+') as f:
@@ -30,3 +32,20 @@ def interactive_chart_for_strategy(strategy: MinimumStrategy):
         fig = strategy.entries.vbt.signals.plot_as_entry_markers(strategy.price, fig=fig)
         fig = strategy.exits.vbt.signals.plot_as_exit_markers(strategy.price, fig=fig)
     fig.show()
+
+
+def load_prediction_data(config: ModelSettings, max_size: int):
+    filename = os.path.join('data/predictions', config.identifier()+str(max_size)+'.prediction')
+
+    if os.path.isfile(filename):
+        logging.info("loading stored prediction")
+        with open(filename, 'rb') as f:
+            return pickle.load(f)
+    else:
+        from model import test_the_model
+        logging.info("building prediction")
+        future_prediction, testing_data, data = test_the_model(config, max_size, graph=False)
+        logging.info("storing prediction")
+        with open(filename, 'wb+') as f:
+            future_prediction.to_pickle(f)
+            return future_prediction

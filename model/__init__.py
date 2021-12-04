@@ -67,13 +67,13 @@ def train_the_model(epochs, batch_size, window_len, input_columns, lstm_neurons,
     return model
 
 
-def test_the_model(model_folder, max_size, data: DataContainer = None, graph=True):
+def test_the_model(config: ModelSettings, max_size, data: DataContainer = None, graph=True):
     from model.learning import load_model
     if not data:
-        data: DataContainer = DataContainer(gru_bigboi3_settings)
+        data: DataContainer = DataContainer(config)
 
-    logging.info(colored(f'Loading model {model_folder}', 'green'))
-    model = load_model(model_folder, data.config.OPTIMIZER, data.config.LOSS)
+    logging.info(colored(f'Loading model {config.MODEL_FOLDER}', 'green'))
+    model = load_model(config.MODEL_FOLDER, data.config.OPTIMIZER, data.config.LOSS)
     max_size = len(data.x_test) if max_size > len(data.x_test) else max_size
     logging.info(colored(f'Running tests on {max_size} samples', 'green'))
 

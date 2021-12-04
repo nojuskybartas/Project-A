@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="228f1aee-2e1a-4f34-a566-1caa07f2c2ff" name="Changes" comment="Refactoring + pep8 compliance + &#10;Added ModelSettings, should be used to store settings for each model">
-      <change beforePath="$PROJECT_DIR$/.idea/Project-A.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Project-A.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="228f1aee-2e1a-4f34-a566-1caa07f2c2ff" name="Changes" comment="Generating signals and showing portfolio profit/development - first rough attempt">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_api/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_api/helpers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_api/strategies.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_api/strategies.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_api/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/cryptocomp/helpers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_api/main.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_api/strategies.py" beforeDir="false" afterPath="$PROJECT_DIR$/cryptocomp/strategies.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/learning.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/learning.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/modelsettings.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/modelsettings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/testing.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +36,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File" value="Python" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/data_api/strategies.py" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
@@ -171,7 +168,14 @@
       <option name="project" value="LOCAL" />
       <updated>1638458872683</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Generating signals and showing portfolio profit/development - first rough attempt">
+      <created>1638562379552</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1638562379552</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -204,7 +208,8 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Refactoring + pep8 compliance&#10;Added ModelSettings, should be used to store settings for each model" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactoring + pep8 compliance&#10;Added ModelSettings, should be used to store settings for each model" />
+    <MESSAGE value="Generating signals and showing portfolio profit/development - first rough attempt" />
+    <option name="LAST_COMMIT_MESSAGE" value="Generating signals and showing portfolio profit/development - first rough attempt" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
