@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 from os.path import isfile
-
-# let's make a settings object for each model we use, like this there won't be any confusion about what settings
-# to use when using it later, for example when testing with an already built model
+import hashlib
 
 
 @dataclass
@@ -24,10 +22,8 @@ class ModelSettings:
     def __post_init__(self):
         assert(isfile(self.DATA_FILENAME) and isfile(self.DATA_FILENAME_TEST))
 
-    def identifier(self):
-        return (f"{self.DATA_FILENAME[5:-5]}{self.DATA_FILENAME_TEST[5:-5]}{self.WINDOW_LEN}{self.INPUT_COLUMNS}"
-                f"{self.TEST_SIZE}{self.ZERO_BASE}{self.GRU_NEURONS}{self.EPOCHS}{self.BATCH_SIZE}"
-                f"{self.LOSS}{self.DROPOUT}{self.OPTIMIZER}")
+    def __hash__(self):
+        return hashlib.md5(str(self).encode('utf-8')).hexdigest()
 
 
 gru_bigboi3_settings = ModelSettings(MODEL_FOLDER='dense badboi v3', WINDOW_LEN=14, INPUT_COLUMNS=1, TEST_SIZE=0.1,

@@ -1,16 +1,14 @@
 import logging
 import pickle
-from os.path import isfile
+from os.path import isfile, join
 import vectorbt as vbt
 from cryptocomp.strategies import MinimumStrategy
-import os
-
 from model import ModelSettings
 
 
 def load_price_data(start, end, symbol):
     # get data from yahoo finance (or locally if we requested it before)
-    filename = os.path.join('data', f"{symbol}_{start.replace(' ', '_')}{end.replace(' ', '_')}.data")
+    filename = join('data', f"{symbol}_{start.replace(' ', '_')}{end.replace(' ', '_')}.data")
 
     if isfile(filename):
         logging.info("loading local price data")
@@ -35,9 +33,9 @@ def interactive_chart_for_strategy(strategy: MinimumStrategy):
 
 
 def load_prediction_data(config: ModelSettings, max_size: int):
-    filename = os.path.join('data/predictions', config.identifier()+str(max_size)+'.prediction')
+    filename = join('data/predictions', f"{config.MODEL_FOLDER}_{max_size}_{config.__hash__()}.prediction")
 
-    if os.path.isfile(filename):
+    if isfile(filename):
         logging.info("loading stored prediction")
         with open(filename, 'rb') as f:
             return pickle.load(f)

@@ -2,27 +2,16 @@ import os
 import logging
 import shutil
 import numpy as np
-import matplotlib.pyplot as plt
 from os.path import isdir
-
+from matplotlib import pyplot as plt
 import pandas as pd
 from termcolor import colored
 
-from model.modelsettings import ModelSettings, gru_bigboi3_settings
-from model.dataframe import DataFrame
+from model.settings import ModelSettings, gru_bigboi3_settings
+from model.modelpackage import ModelPackagage
 
 np.random.seed(42)
 logging.getLogger().setLevel(logging.INFO)
-
-
-class DataContainer:
-    def __init__(self, config: ModelSettings, data_filename=None):
-        self.config: ModelSettings = config
-        if not data_filename:
-            data_filename = config.DATA_FILENAME
-        self.dataframe = DataFrame(data_filename)
-        self.train_data, self.test_data, self.x_train, self.x_test, self.y_train, self.y_test = \
-            self.dataframe.prepare_data(config.WINDOW_LEN, config.ZERO_BASE, config.TEST_SIZE)
 
 
 def line_plot(line1, line2, label1=None, label2=None, title='', lw=2):
@@ -67,10 +56,9 @@ def train_the_model(epochs, batch_size, window_len, input_columns, lstm_neurons,
     return model
 
 
-def test_the_model(config: ModelSettings, max_size, data: DataContainer = None, graph=True):
+def test_the_model(config: ModelSettings, max_size, graph=True):
     from model.learning import load_model
-    if not data:
-        data: DataContainer = DataContainer(config)
+    data = ModelPackagage(config)
 
     logging.info(colored(f'Loading model {config.MODEL_FOLDER}', 'green'))
     model = load_model(config.MODEL_FOLDER, data.config.OPTIMIZER, data.config.LOSS)
@@ -82,12 +70,12 @@ def test_the_model(config: ModelSettings, max_size, data: DataContainer = None, 
     y_test_with_dates = pd.DataFrame(data=data.y_test[:max_size], index=data.test_data.index[:max_size])
 
     if graph:
-        line_plot(y_test_with_dates, predictions_with_dates, 'test_data', 'prediction',  title='ETH price prediction')
+        line_plot(y_test_with_dates, predictions_with_dates, 'test_data', 'prediction', title='ETH price prediction')
     return predictions_with_dates, y_test_with_dates, data
 
 
 if __name__ == '__main__':
-    m_data = DataContainer(gru_bigboi3_settings)
+    m_data = ModelPackagage(gru_bigboi3_settings)
 
     '''Visualizing the dataset'''
     print(m_data.x_train[:3])
