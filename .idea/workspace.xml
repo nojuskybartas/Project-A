@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="228f1aee-2e1a-4f34-a566-1caa07f2c2ff" name="Changes" comment="Load/store predictions &amp; avoid loading slow ML libs + refactoring">
+    <list default="true" id="228f1aee-2e1a-4f34-a566-1caa07f2c2ff" name="Changes" comment="Major refactoring">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cryptocomp/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/cryptocomp/helpers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/predictions/ETH-USD_2016-01-01_UTC2021-11-07_UTCETH-USD_2021-11-07_UTC2021-11-24_UTC1410.1False300025032mse0.2adam300.prediction" beforeDir="false" afterPath="$PROJECT_DIR$/data/predictions/dense badboi v3_300_fe25a793a4fd33c4224ad664da209d95.prediction" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/dataframe.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/modelpackage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/modelsettings.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/modelpackage.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/modelpackage.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -182,7 +178,14 @@
       <option name="project" value="LOCAL" />
       <updated>1638628527756</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Major refactoring">
+      <created>1638987885390</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1638987885390</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -217,7 +220,8 @@
     <MESSAGE value="Refactoring + pep8 compliance&#10;Added ModelSettings, should be used to store settings for each model" />
     <MESSAGE value="Generating signals and showing portfolio profit/development - first rough attempt" />
     <MESSAGE value="Load/store predictions &amp; avoid loading slow ML libs + refactoring" />
-    <option name="LAST_COMMIT_MESSAGE" value="Load/store predictions &amp; avoid loading slow ML libs + refactoring" />
+    <MESSAGE value="Major refactoring" />
+    <option name="LAST_COMMIT_MESSAGE" value="Major refactoring" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

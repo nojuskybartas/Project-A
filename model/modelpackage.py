@@ -5,7 +5,7 @@ import numpy as np
 from model import ModelSettings
 
 
-class ModelPackagage:
+class ModelPackage:
     def __init__(self, config: ModelSettings):
         assert(isfile(config.DATA_FILENAME) and isfile(config.DATA_FILENAME_TEST))
         with open(config.DATA_FILENAME, 'rb') as f:

@@ -8,7 +8,7 @@ import pandas as pd
 from termcolor import colored
 
 from model.settings import ModelSettings, gru_bigboi3_settings
-from model.modelpackage import ModelPackagage
+from model.modelpackage import ModelPackage
 
 np.random.seed(42)
 logging.getLogger().setLevel(logging.INFO)
@@ -58,7 +58,7 @@ def train_the_model(epochs, batch_size, window_len, input_columns, lstm_neurons,
 
 def test_the_model(config: ModelSettings, max_size, graph=True):
     from model.learning import load_model
-    data = ModelPackagage(config)
+    data = ModelPackage(config)
 
     logging.info(colored(f'Loading model {config.MODEL_FOLDER}', 'green'))
     model = load_model(config.MODEL_FOLDER, data.config.OPTIMIZER, data.config.LOSS)
@@ -75,7 +75,7 @@ def test_the_model(config: ModelSettings, max_size, graph=True):
 
 
 if __name__ == '__main__':
-    m_data = ModelPackagage(gru_bigboi3_settings)
+    m_data = ModelPackage(gru_bigboi3_settings)
 
     '''Visualizing the dataset'''
     print(m_data.x_train[:3])
