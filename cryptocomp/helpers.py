@@ -6,9 +6,9 @@ from cryptocomp.strategies import MinimumStrategy
 from model import ModelSettings
 
 
-def load_price_data(start, end, symbol):
+def load_price_data(start, end, symbol, timeframe='daily'):
     # get data from yahoo finance (or locally if we requested it before)
-    filename = join('data', f"{symbol}_{start.replace(' ', '_')}{end.replace(' ', '_')}.data")
+    filename = join('data', f"{symbol}_{start.replace(' ', '_')}{end.replace(' ', '_')}_{timeframe}.data")
 
     if isfile(filename):
         logging.info("loading local price data")
@@ -17,7 +17,11 @@ def load_price_data(start, end, symbol):
     else:
         logging.info("requesting api for price data")
         # possibilities: cols = ['Open', 'High', 'Low', 'Close', 'Volume']
-        data = vbt.YFData.download(symbol, start=start, end=end, cols=['Close']).get('Close')
+        interval = "1h" if timeframe == 'hourly' else "1d"
+        data = vbt.YFData.download(symbol, start=start, end=end, cols=['Close'], interval=interval).get('Close')
+        if data.empty:
+            logging.critical("Failed to download API data")
+            return None
         with open(filename, 'wb+') as f:
             data.to_pickle(f)
         return data
