@@ -114,3 +114,6 @@ dmypy.json
 .pyre/
 
 .idea/
+
+# Trained models
+/trained_models/DEPRECATED*

@@ -8,7 +8,7 @@ import pandas as pd
 from termcolor import colored
 
 from model.settings import ModelSettings, gru_bigboi3_settings
-from model.modelpackage import ModelPackage
+from model.dataclass import DataClass
 
 np.random.seed(42)
 logging.getLogger().setLevel(logging.INFO)
@@ -24,65 +24,57 @@ def line_plot(line1, line2, label1=None, label2=None, title='', lw=2):
     plt.show()
 
 
-def train_the_model(epochs, batch_size, window_len, input_columns, lstm_neurons, loss, dropout, optimizer,
-                    data=None, graph=True, summary=True):
-    from model.learning import build_neural_model, model_metrics
-    model_folder = input(colored('Describe the model: ', 'green'))
-    path = os.path.join('trained_models', model_folder)
+def train(config: ModelSettings, showTestGraph=True, modelSummary=True):
+    from model.architecture import build_model, model_metrics
+    from model.dataclass import DataClass 
 
-    logging.info('Building model...')
-    model = build_neural_model(window_len=window_len, input_columns=input_columns, output_size=1,
-                               neurons=lstm_neurons, dropout=dropout, loss=loss, optimizer=optimizer)
+    data = DataClass(config)
 
-    if summary:
-        print(model.summary())
-    history = model.fit(data.x_train, data.y_train, epochs=epochs, batch_size=batch_size, verbose=1,
+    logging.info(colored('Building model...', 'green'))
+    model = build_model(window_len=config.WINDOW_LEN, input_columns=config.INPUT_COLUMNS, output_size=1,
+                               neurons=config.GRU_NEURONS, dropout=config.DROPOUT, loss=config.LOSS, optimizer=config.OPTIMIZER)
+
+    if modelSummary:
+        logging.info(model.summary())
+
+    history = model.fit(data.x_train, data.y_train, epochs=config.EPOCHS, batch_size=config.BATCH_SIZE, verbose=1,
                         shuffle=True, callbacks=model_metrics)
 
     model_json = model.to_json()
-    with open("eth_pred_model.json", "w") as json_file:
+    with open(f"{config.CURRENCY}_pred_model.json", "w") as json_file:
         json_file.write(model_json)
     
     np.save('history.npy', history.history)
 
+    path = os.path.join('trained_models', config.MODEL_FOLDER)
     os.mkdir(path) if not isdir(path) else [shutil.rmtree(path), os.mkdir(path)]
     os.rename("history.npy", os.path.join(path, "history.npy"))
-    os.rename("eth_pred_model.json", os.path.join(path, "eth_pred_model.json"))
-    os.rename("eth_pred_model_weights.hdf5", os.path.join(path, "eth_pred_model_weights.hdf5"))
+    os.rename(f"{config.CURRENCY}_pred_model.json", os.path.join(path, f"{config.CURRENCY}_pred_model.json"))
+    os.rename(f"{config.CURRENCY}_pred_model_weights.hdf5", os.path.join(path, f"{config.CURRENCY}_pred_model_weights.hdf5"))
     
-    if graph:
+    if showTestGraph:
         preds = model.predict(data.x_test)
-        line_plot(data.y_test, preds, 'training', 'test', title='ETH price prediction')
+        logging.info(preds)
+        line_plot(data.y_test, preds, 'training', 'test', title=f'{config.CURRENCY} price prediction')
+    
     return model
 
 
-def test_the_model(config: ModelSettings, max_size, graph=True):
-    from model.learning import load_model
-    data = ModelPackage(config)
+def test(config: ModelSettings, size, graph=True):
+    from model.architecture import load_model
+
+    data = DataClass(config)
 
     logging.info(colored(f'Loading model {config.MODEL_FOLDER}', 'green'))
-    model = load_model(config.MODEL_FOLDER, data.config.OPTIMIZER, data.config.LOSS)
-    max_size = len(data.x_test) if max_size > len(data.x_test) else max_size
-    logging.info(colored(f'Running tests on {max_size} samples', 'green'))
+    model = load_model(config.MODEL_FOLDER, config.OPTIMIZER, config.LOSS)
+    size = len(data.x_test) if size > len(data.x_test) else size
+    
+    logging.info(colored(f'Running tests on {size} samples', 'green'))
+    preds = model.predict(data.x_test[:size])
 
-    preds = model.predict(data.x_test[:max_size])
-    predictions_with_dates = pd.DataFrame(data=preds, index=data.test_data.index[:max_size])
-    y_test_with_dates = pd.DataFrame(data=data.y_test[:max_size], index=data.test_data.index[:max_size])
+    predictions_with_dates = pd.DataFrame(data=preds, index=data.test_data.index[:size])
+    y_test_with_dates = pd.DataFrame(data=data.y_test[:size], index=data.test_data.index[:size])
 
     if graph:
-        line_plot(y_test_with_dates, predictions_with_dates, 'test_data', 'prediction', title='ETH price prediction')
+        line_plot(y_test_with_dates, predictions_with_dates, 'test_data', 'prediction', title=f'{config.CURRENCY} price prediction')
     return predictions_with_dates, y_test_with_dates, data
-
-
-if __name__ == '__main__':
-    m_data = ModelPackage(gru_bigboi3_settings)
-
-    '''Visualizing the dataset'''
-    print(m_data.x_train[:3])
-    print('--')
-    print(m_data.y_train[:3])
-
-    c = m_data.config
-    the_model = train_the_model(c.EPOCHS, c.BATCH_SIZE, c.WINDOW_LEN, c.INPUT_COLUMNS,
-                                c.GRU_NEURONS, c.LOSS, c.DROPOUT, c.OPTIMIZER, data=m_data, graph=True)
-    # test_the_model('dense badboi v4', 200, data=m_data)

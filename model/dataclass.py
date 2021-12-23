@@ -5,15 +5,14 @@ import numpy as np
 from model import ModelSettings
 
 
-class ModelPackage:
+class DataClass:
     def __init__(self, config: ModelSettings):
-        assert(isfile(config.DATA_FILENAME) and isfile(config.DATA_FILENAME_TEST))
         with open(config.DATA_FILENAME, 'rb') as f:
             self.df = pd.DataFrame(pickle.load(f))
 
-        d = list(self.df['Close'])
-        self.df['dayChange'] = [0]+[d[i+1] - v for i, v in enumerate(d) if v is not d[-1]]
-        self.df['dayPercentChange'] = [0]+[(100 * d[i+1] / v) - 100 for i, v in enumerate(d) if v is not d[-1]]
+        # d = list(self.df['Close'])
+        # self.df['dayChange'] = [0]+[d[i+1] - v for i, v in enumerate(d) if v is not d[-1]]
+        # self.df['dayPercentChange'] = [0]+[(100 * d[i+1] / v) - 100 for i, v in enumerate(d) if v is not d[-1]]
 
         self.config = config
         self.train_data, self.test_data, self.x_train, self.x_test, self.y_train, self.y_test = \
@@ -42,10 +41,11 @@ class ModelPackage:
         y_train = train_data[window_len:].values
         y_test = test_data[window_len:].values
 
-        assert(len(x_train) == len(y_train) and len(x_test) == len(y_test))
         if zero_base:
             y_train = y_train / train_data[:-window_len].values - 1
             y_test = y_test / test_data[:-window_len].values - 1
+
+        assert(len(x_train) == len(y_train) and len(x_test) == len(y_test))
         if debug:
             print([element.shape + '\n' for element in [train_data, test_data, x_train, x_test, y_train, y_test]])
 

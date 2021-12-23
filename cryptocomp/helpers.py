@@ -3,7 +3,7 @@ import pickle
 from os.path import isfile, join
 import vectorbt as vbt
 from cryptocomp.strategies import MinimumStrategy
-from model import ModelSettings
+from model.settings import ModelSettings
 
 
 def load_price_data(start, end, symbol, timeframe='daily'):
@@ -44,9 +44,9 @@ def load_prediction_data(config: ModelSettings, max_size: int):
         with open(filename, 'rb') as f:
             return pickle.load(f)
     else:
-        from model import test_the_model
+        from model import test
         logging.info("building prediction")
-        future_prediction, testing_data, data = test_the_model(config, max_size, graph=False)
+        future_prediction, testing_data, data = test(config, max_size, graph=False)
         logging.info("storing prediction")
         with open(filename, 'wb+') as f:
             future_prediction.to_pickle(f)

@@ -11,17 +11,18 @@ import tensorflow as tf
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, GRU
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+from model.settings import PATIENCE, VERBOSE
 
 
 # Save model weights
-checkpointer = ModelCheckpoint(filepath="eth_pred_model_weights.hdf5", verbose=1, save_best_only=False)
+checkpointer = ModelCheckpoint(filepath="eth_pred_model_weights.hdf5", verbose=VERBOSE, save_best_only=False)
 # Use early stopping to exit training if validation loss is not decreasing even after certain epochs (patience)
-earlystopping = EarlyStopping(monitor='loss', mode='min', verbose=1, patience=7)
+earlystopping = EarlyStopping(monitor='loss', mode='min', verbose=VERBOSE, patience=PATIENCE)
 
 model_metrics = [checkpointer, earlystopping]
 
 
-def build_neural_model(window_len, input_columns, output_size, neurons=3000, activ_func='linear',
+def build_model(window_len, input_columns, output_size, neurons=3000, activ_func='linear',
                        dropout=0.2, loss='mse', optimizer='adam'):
     model = Sequential()
     # model.add(Embedding(window_len, 512))
@@ -56,5 +57,5 @@ def load_model(model_folder, optimizer, loss, metrics=None):
 
 
 if __name__ == '__main__':
-    the_model = build_neural_model(14, 1, output_size=1)
+    the_model = build_model(14, 1, output_size=1)
     print(the_model.summary())

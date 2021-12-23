@@ -2,10 +2,15 @@ from dataclasses import dataclass
 from os.path import isfile
 import hashlib
 
+# settings for training metrics
+VERBOSE: int = 1 # Checkpointer
+PATIENCE: int = 1 # Early-stopping
+
 
 @dataclass
 class ModelSettings:
     MODEL_FOLDER: str
+    CURRENCY: str
     TIMEFRAME: str
     DATA_FILENAME: str
     DATA_FILENAME_TEST: str
@@ -27,16 +32,16 @@ class ModelSettings:
         return hashlib.md5(str(self).encode('utf-8')).hexdigest()
 
 
-gru_bigboi3_settings = ModelSettings(MODEL_FOLDER='dense badboi v3', TIMEFRAME='1d',
+gru_bigboi3_settings = ModelSettings(MODEL_FOLDER='dense badboi v3', CURRENCY='eth', TIMEFRAME='1d',
                                      DATA_FILENAME='data/ETH-USD_2016-01-01_UTC2021-11-07_UTC_daily.data',
                                      DATA_FILENAME_TEST='data/ETH-USD_2021-11-07_UTC2021-11-24_UTC_daily.data',
                                      WINDOW_LEN=14, INPUT_COLUMNS=1, TEST_SIZE=0.1,
                                      ZERO_BASE=False, GRU_NEURONS=3000, EPOCHS=250, BATCH_SIZE=32, LOSS='mse',
                                      DROPOUT=0.2, OPTIMIZER='adam')
 
-bigboi_hourly_settings = ModelSettings(MODEL_FOLDER='bigboi_hourly', TIMEFRAME='1h',
+bigboi_hourly_settings = ModelSettings(MODEL_FOLDER='bigboi_hourly', CURRENCY='eth', TIMEFRAME='1h',
                                        DATA_FILENAME='data/ETH-USD_2020-1-10_UTC2021-12-20_UTC_hourly.data',
                                        DATA_FILENAME_TEST='data/ETH-USD_2020-1-10_UTC2021-12-20_UTC_hourly.data',
-                                       WINDOW_LEN=14, INPUT_COLUMNS=1, TEST_SIZE=0.1,
-                                       ZERO_BASE=False, GRU_NEURONS=3000, EPOCHS=250, BATCH_SIZE=32, LOSS='mse',
+                                       WINDOW_LEN=120, INPUT_COLUMNS=1, TEST_SIZE=0.1,
+                                       ZERO_BASE=False, GRU_NEURONS=3000, EPOCHS=250, BATCH_SIZE=16, LOSS='mse',
                                        DROPOUT=0.2, OPTIMIZER='adam')
