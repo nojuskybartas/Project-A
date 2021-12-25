@@ -6,7 +6,7 @@ import model.settings as settings
 logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message)s", datefmt="%d-%b-%y %H:%M:%S")
 logging.getLogger().setLevel(logging.INFO)
 
-prediction = load_prediction_data(settings.gru_bigboi3_settings, 300)
+prediction = load_prediction_data(settings.bigboi, 199)
 price = load_price_data('2021-04-09 UTC', '2021-10-24 UTC', 'ETH-USD', timeframe='daily')
 
 entries, exits = get_simple_entries_exits(prediction, price)

@@ -2,9 +2,9 @@ from dataclasses import dataclass
 from os.path import isfile
 import hashlib
 
-# settings for training metrics
-VERBOSE: int = 1 # Checkpointer
-PATIENCE: int = 1 # Early-stopping
+# settings for training
+VERBOSE: int = 1 # 0: no visual feedback, 1: animated progress bar, 2: show number of epoch
+PATIENCE: int = 20 # For early-stopping
 
 
 @dataclass
@@ -45,3 +45,11 @@ bigboi_hourly_settings = ModelSettings(MODEL_FOLDER='bigboi_hourly', CURRENCY='e
                                        WINDOW_LEN=120, INPUT_COLUMNS=1, TEST_SIZE=0.1,
                                        ZERO_BASE=False, GRU_NEURONS=3000, EPOCHS=250, BATCH_SIZE=16, LOSS='mse',
                                        DROPOUT=0.2, OPTIMIZER='adam')
+
+bigboi = ModelSettings(MODEL_FOLDER='bigboi_hourly_1', CURRENCY='eth', TIMEFRAME='1h',
+                        DATA_FILENAME='data/ETH-USD_2020-1-10_UTC2021-12-20_UTC_hourly.data',
+                        DATA_FILENAME_TEST='data/ETH-USD_2020-1-10_UTC2021-12-20_UTC_hourly.data',
+                        WINDOW_LEN=72, INPUT_COLUMNS=1, TEST_SIZE=0.1,
+                        ZERO_BASE=False, GRU_NEURONS=2048, EPOCHS=60, BATCH_SIZE=64, LOSS='mse',
+                        DROPOUT=0.2, OPTIMIZER='adam')
+
