@@ -2,7 +2,11 @@ import pickle
 import pandas as pd
 from os.path import isfile
 import numpy as np
-from model import ModelSettings
+from termcolor import colored
+import logging
+from model.settings import ModelSettings
+
+logging.getLogger().setLevel(logging.INFO)
 
 
 class DataClass:
@@ -16,7 +20,8 @@ class DataClass:
 
         self.config = config
         self.train_data, self.test_data, self.x_train, self.x_test, self.y_train, self.y_test = \
-            self.prepare_data(config.WINDOW_LEN, config.ZERO_BASE, config.TEST_SIZE)
+            self.prepare_data(config.WINDOW_LEN,
+                              config.ZERO_BASE, config.TEST_SIZE)
 
     def train_test_split(self, test_size=0.2):
         split_row = len(self.df) - int(test_size * len(self.df))
@@ -31,7 +36,8 @@ class DataClass:
         window_data = []
         for idx in range(len(df) - window_len):
             tmp = df[idx: (idx + window_len)].copy()
-            window_data.append(tmp.values if not zero_base else self.normalise_zero_base())
+            window_data.append(
+                tmp.values if not zero_base else self.normalise_zero_base())
         return np.array(window_data)
 
     def prepare_data(self, window_len, zero_base, test_size=0.2, debug=False):
@@ -47,6 +53,7 @@ class DataClass:
 
         assert(len(x_train) == len(y_train) and len(x_test) == len(y_test))
         if debug:
-            print([element.shape + '\n' for element in [train_data, test_data, x_train, x_test, y_train, y_test]])
+            print([element.shape + '\n' for element in [train_data,
+                  test_data, x_train, x_test, y_train, y_test]])
 
         return train_data, test_data, x_train, x_test, y_train, y_test

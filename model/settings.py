@@ -1,10 +1,13 @@
 from dataclasses import dataclass
 from os.path import isfile
 import hashlib
+from termcolor import colored
+import logging
+logging.getLogger().setLevel(logging.INFO)
 
 # settings for training
-VERBOSE: int = 1 # 0: no visual feedback, 1: animated progress bar, 2: show number of epoch
-PATIENCE: int = 20 # For early-stopping
+VERBOSE: int = 1  # 0: no visual feedback, 1: animated progress bar, 2: show number of epoch
+PATIENCE: int = 20  # For early-stopping
 
 
 @dataclass
@@ -32,7 +35,7 @@ class ModelSettings:
         return hashlib.md5(str(self).encode('utf-8')).hexdigest()
 
 
-gru_bigboi3_settings = ModelSettings(MODEL_FOLDER='dense badboi v3', CURRENCY='eth', TIMEFRAME='1d',
+gru_bigboi3 = ModelSettings(MODEL_FOLDER='dense badboi v3', CURRENCY='eth', TIMEFRAME='1d',
                                      DATA_FILENAME='data/ETH-USD_2016-01-01_UTC2021-11-07_UTC_daily.data',
                                      DATA_FILENAME_TEST='data/ETH-USD_2021-11-07_UTC2021-11-24_UTC_daily.data',
                                      WINDOW_LEN=14, INPUT_COLUMNS=1, TEST_SIZE=0.1,
@@ -47,9 +50,8 @@ bigboi_hourly_settings = ModelSettings(MODEL_FOLDER='bigboi_hourly', CURRENCY='e
                                        DROPOUT=0.2, OPTIMIZER='adam')
 
 bigboi = ModelSettings(MODEL_FOLDER='bigboi_hourly_1', CURRENCY='eth', TIMEFRAME='1h',
-                        DATA_FILENAME='data/ETH-USD_2020-1-10_UTC2021-12-20_UTC_hourly.data',
-                        DATA_FILENAME_TEST='data/ETH-USD_2020-1-10_UTC2021-12-20_UTC_hourly.data',
-                        WINDOW_LEN=72, INPUT_COLUMNS=1, TEST_SIZE=0.1,
-                        ZERO_BASE=False, GRU_NEURONS=2048, EPOCHS=60, BATCH_SIZE=64, LOSS='mse',
-                        DROPOUT=0.2, OPTIMIZER='adam')
-
+                       DATA_FILENAME='data/ETH-USD_2020-1-10_UTC2021-12-20_UTC_hourly.data',
+                       DATA_FILENAME_TEST='data/ETH-USD_2020-1-10_UTC2021-12-20_UTC_hourly.data',
+                       WINDOW_LEN=72, INPUT_COLUMNS=1, TEST_SIZE=0.1,
+                       ZERO_BASE=False, GRU_NEURONS=2048, EPOCHS=60, BATCH_SIZE=64, LOSS='mse',
+                       DROPOUT=0.2, OPTIMIZER='adam')
