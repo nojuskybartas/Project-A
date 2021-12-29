@@ -31,3 +31,4 @@ termcolor==1.1.0
 vectorbt==0.21.0
 Werkzeug==2.0.2
 yfinance==0.1.64
+gunicorn==19.3.0
