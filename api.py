@@ -10,7 +10,7 @@ def pre_load(settings):
     model = ModelContainer(settings)
     model.run_inference(1, False, False)
     return model
-
+model = pre_load(gru_bigboi3)
 # EG: http://127.0.0.1:5000/api?timeframe=1&predict_forward=True&json_orient=split
 @app.route('/api')
 def index():
@@ -23,5 +23,4 @@ def index():
 # NOTE: for unknown reason, if you add predict_forward=False in the args when calling the api, it will still return True. For now, the way to have it as False is to not include it in the args at all
 
 if __name__=="__main__":
-    model = pre_load(gru_bigboi3)
     app.run(debug=True)
