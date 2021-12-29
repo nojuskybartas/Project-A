@@ -1,14 +1,18 @@
 import os
 import logging
 
-try:
-    logging.info('Looking for CUDA and adding it to path...')
-    # some python versions fail to load the path variables, so we're doing it manually here before importing tensorflow
-    loaddir = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.2/bin"
-    os.add_dll_directory(loaddir)
-    logging.info('Found!')
-except FileNotFoundError:
-    logging.info('CUDA not found, this gon be slow af')
+# (windows only for now)
+if os.name == 'nt':
+    try:
+        logging.info('Looking for CUDA and adding it to path...')
+        # some python versions fail to load the path variables, so we're doing it manually here before importing tensorflow
+    
+        loaddir = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.2/bin"
+        os.add_dll_directory(loaddir)
+        logging.info('Found!')
+
+    except Exception as e:
+        logging.info(f'CUDA not found, this gon be slow af \n{e}')
 
 import shutil
 import json
