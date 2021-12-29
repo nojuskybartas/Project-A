@@ -1,32 +1,33 @@
 import os
-from termcolor import colored
 import logging
-logging.getLogger().setLevel(logging.INFO)
+
 try:
-    logging.info(colored('Looking for CUDA and adding it to path...', 'green'))
+    logging.info('Looking for CUDA and adding it to path...')
     # some python versions fail to load the path variables, so we're doing it manually here before importing tensorflow
     loaddir = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.2/bin"
     os.add_dll_directory(loaddir)
-    logging.info(colored('Found!', 'green'))
-except FileNotFoundError as e:
-    logging.info(colored('CUDA not found, this gon be slow af', 'green'))
+    logging.info('Found!')
+except FileNotFoundError:
+    logging.info('CUDA not found, this gon be slow af')
 
 import shutil
 import json
 import numpy as np
-logging.info(colored('Loading TensorFlow Libs...', 'green'))
+logging.info('Loading TensorFlow Libs...')  # noqa: E402
 import tensorflow as tf
 import keras
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, GRU, Activation, Add
+from keras.layers import Dense, Dropout, GRU
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-from model.settings import PATIENCE, VERBOSE
-logging.info(colored('Done!', 'green'))
+
+logging.info('Done!')
 
 # Save model weights
+VERBOSE: int = 1  # 0: no visual feedback, 1: animated progress bar, 2: show number of epoch
 checkpointer = ModelCheckpoint(
     filepath="pred_model_weights.hdf5", verbose=VERBOSE, save_best_only=True)
 # Use early stopping to exit training if validation loss is not decreasing even after certain epochs (patience)
+PATIENCE: int = 20  # For early-stopping
 earlystopping = EarlyStopping(
     monitor='loss', mode='min', verbose=VERBOSE, patience=PATIENCE)
 
@@ -54,7 +55,8 @@ def build_sequential(window_len, input_columns, output_size, neurons=3000, activ
     model.compile(loss=loss, optimizer=optimizer)
     return model
 
-# This function builds a nn model using the 'functional api': its more advanced and allows to have multiple pathways (non-linear)
+# This function builds a nn model using the 'functional api':
+# it's more advanced and allows to have multiple pathways (non-linear)
 
 
 def build(window_len, input_columns, output_size, neurons, activ_func='linear',
@@ -118,8 +120,8 @@ def save(model, history, config):
         np.save('history.npy', history.history)
 
     path = os.path.join('trained_models', config.MODEL_FOLDER)
-    os.mkdir(path) if not os.path.isdir(path) else [logging.info(colored(
-        f'This model version already exists! OVERWRITING!', 'green')), shutil.rmtree(path), os.mkdir(path)]
+    os.mkdir(path) if not os.path.isdir(path) else [logging.info(
+        f'This model version already exists! OVERWRITING!'), shutil.rmtree(path), os.mkdir(path)]
     params = {'optimizer': config.OPTIMIZER, 'loss': config.LOSS}
     with open(os.path.join(path, 'params.json'), 'w') as json_file:
         json.dump(params, json_file)
@@ -128,47 +130,40 @@ def save(model, history, config):
         path, f"{config.CURRENCY}_pred_model.json"))
     os.rename("pred_model_weights.hdf5", os.path.join(
         path, f"{config.CURRENCY}_pred_model_weights.hdf5"))
-    logging.info(
-        colored(f'Trained model successfully saved to {path}', 'green'))
+    logging.info(f'Trained model successfully saved to {path}')
 
 
 def load(model_folder, optimizer=None, loss=None, metrics=None):
-    logging.info(colored(f'Loading model <{model_folder}>...', 'green'))
+    logging.info(f'Loading model <{model_folder}>...')
     try:
         with open(os.path.join('trained_models', model_folder, 'eth_pred_model.json'), 'r') as json_file:
             json_saved_model = json_file.read()
-    except:
-        logging.info(
-            colored(f'Failed to load the model - model not found!', 'red'))
+    except Exception as e:
+        logging.info(f'Failed to load the model - model not found!\n{e}')
         return
+
     model = tf.keras.models.model_from_json(json_saved_model)
 
     # history=np.load(os.path.join('trained_models', model_folder, 'history.npy'),allow_pickle='TRUE').item()
     if optimizer is None or loss is None:
         logging.info(
-            colored(f'No model parameters given - reading from file', 'white'))
+            f'No model parameters given - reading from file')
         try:
             with open(os.path.join('trained_models', model_folder, 'params.json')) as json_file:
                 params = json.load(json_file)
-        except:
-            logging.info(colored(
-                f'Failed to load the params - file not found! Please provide the optimizer and loss in the function call or in a params.json file', 'red'))
+        except Exception as e:
+            logging.info(f'Failed to load the params - file not found! Please provide the optimizer and loss '
+                         f'in the function call or in a params.json file\n{e}')
             return
         optimizer = params['optimizer']
         loss = params['loss']
     
     try:
-        logging.info(colored('Loading model weights...', 'green'))
+        logging.info('Loading model weights...')
         model.load_weights(os.path.join(
             'trained_models', model_folder, 'eth_pred_model_weights.hdf5'))
-    except:
-        logging.info(
-            colored(f'Failed to load the model - weight file not found!', 'red'))
+    except Exception as e:
+        logging.info(f'Failed to load the model - weight file not found!\n{e}')
     model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
-    logging.info(colored(f'Successfully loaded the model', 'green'))
+    logging.info(f'Successfully loaded the model')
     return model
-
-
-if __name__ == '__main__':
-    the_model = build(14, 1, output_size=1)
-    print(the_model.summary())

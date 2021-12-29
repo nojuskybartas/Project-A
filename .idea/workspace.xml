@@ -1,7 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="228f1aee-2e1a-4f34-a566-1caa07f2c2ff" name="Changes" comment="Major refactoring" />
+    <list default="true" id="228f1aee-2e1a-4f34-a566-1caa07f2c2ff" name="Changes" comment="Major refactoring">
+      <change afterPath="$PROJECT_DIR$/model/functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cryptocomp/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/cryptocomp/helpers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/predictions/bigboi_hourly_1_199_24b6cedf9bec5b630fa541f9f3729214.prediction" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/predictions/bigboi_hourly_1_300_24b6cedf9bec5b630fa541f9f3729214.prediction" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/predictions/dense badboi v3_300_031ea3270689bfbf17aaa5ed4d26eaf9.prediction" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/architecture.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/architecture.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/dataclass.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/dataclass.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trained_models/dense badboi v3/100 day prediction.png" beforeDir="false" afterPath="$PROJECT_DIR$/trained_models/dense badboi v3/100 day prediction.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trained_models/dense badboi v3/5 day prediction.png" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -34,7 +51,7 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunManager" selected="Python.main (1)">
-    <configuration name="df prep" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="dataclass" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Project-A" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -46,8 +63,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/model/df prep.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/model/dataclass.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -121,7 +137,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests in __init__.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="train" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Project-A" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/train.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests in functions.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="Project-A" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -132,17 +169,17 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/model/__init__.py&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/model/functions.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Python.main (1)" />
+        <item itemvalue="Python.train" />
+        <item itemvalue="Python.dataclass" />
+        <item itemvalue="Python tests.Python tests in functions.py" />
         <item itemvalue="Python.modelpackage" />
-        <item itemvalue="Python.modelpackage" />
-        <item itemvalue="Python tests.Python tests in __init__.py" />
-        <item itemvalue="Python.df prep" />
       </list>
     </recent_temporary>
   </component>
@@ -227,7 +264,7 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <default-breakpoints>
-        <breakpoint type="python-exception">
+        <breakpoint enabled="true" log-message="true" type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">
             <option name="notifyOnTerminate" value="true" />
           </properties>

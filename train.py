@@ -1,13 +1,11 @@
-import model
-
-import model.settings as settings
-from model.utils import line_plot
-
-
-# model.test(settings.gru_bigboi3, 200)
-# model.train(settings.bigboi)
-dataset = model.DataClass(settings.gru_bigboi3)
-last_window_data = dataset.x_test[177:178]
+import os
+import coloredlogs
+os.environ['COLOREDLOGS_LEVEL_STYLES'] = 'info=blue'  # noqa: E402
+coloredlogs.install()  # noqa: E402
+from model.settings import gru_bigboi3
+from model.container import ModelContainer
 
 
-model.run_inference('dense badboi v3', last_window_data, 100)
+bigboi = ModelContainer(gru_bigboi3)
+# bigboi.train()
+bigboi.run_inference(100)
