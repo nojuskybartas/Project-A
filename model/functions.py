@@ -54,7 +54,7 @@ def run_inference(model: ModelContainer, days_to_predict, predict_forward=False,
     idx_pred = x_test.index[window_len:window_len+days_to_predict]
     idx_window_data = x_test.index[0:window_len]
 
-    logging.info(f'Making a {days_to_predict} day prediction from \n{idx_pred[0]} ----- {idx_pred[-1]}')
+    logging.info(f'Making a {days_to_predict} day prediction (Predict forward: {predict_forward}) from \n{idx_pred[0]} ----- {idx_pred[-1]}')
     logging.info(f'Using window \n{idx_window_data[0]} ----- {idx_window_data[-1]}')
     predictions = []
 

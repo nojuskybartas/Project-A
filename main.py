@@ -1,8 +1,5 @@
 import os
-os.environ['COLOREDLOGS_LEVEL_STYLES'] = 'info=blue'  # noqa: E402
 import logging
-import coloredlogs
-coloredlogs.install()  # noqa: E402
 from cryptocomp.helpers import load_price_data, load_prediction_data
 from cryptocomp.strategies import HoldingStrategy, NeuralStrategy, MaCrossoverStrategy, get_simple_entries_exits
 from model.settings import gru_bigboi3
