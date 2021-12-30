@@ -2,7 +2,6 @@ import logging
 import pickle
 from os.path import isfile, join
 import vectorbt as vbt
-from cryptocomp.strategies import MinimumStrategy
 from model.container import ModelContainer
 
 
@@ -27,16 +26,7 @@ def load_price_data(start, end, symbol, timeframe='daily'):
         return data
 
 
-def interactive_chart_for_strategy(strategy: MinimumStrategy):
-    fig = vbt.make_subplots(specs=[[{"secondary_y": True}]])
-    fig = strategy.price.vbt.plot(trace_kwargs=dict(name='Price'), fig=fig)
-    if strategy.entries is not None and strategy.exits is not None:
-        fig = strategy.entries.vbt.signals.plot_as_entry_markers(strategy.price, fig=fig)
-        fig = strategy.exits.vbt.signals.plot_as_exit_markers(strategy.price, fig=fig)
-    fig.show()
-
-
-def load_prediction_data(model: ModelContainer, max_size: int, predict_forward=False):
+def load_prediction_data(model: ModelContainer, max_size: int, predict_forward=False, plot=True):
     filename = join('data/predictions',
                     f"{model.config.MODEL_FOLDER}_{max_size}_{predict_forward}_{model.__hash__()}.prediction")
 
@@ -46,7 +36,7 @@ def load_prediction_data(model: ModelContainer, max_size: int, predict_forward=F
             return pickle.load(f)
     else:
         logging.info("building prediction")
-        future_prediction = model.run_inference(max_size, predict_forward=predict_forward)
+        future_prediction = model.run_inference(max_size, predict_forward=predict_forward, plot=plot)
         logging.info("storing prediction")
         with open(filename, 'wb+') as f:
             future_prediction.to_pickle(f)

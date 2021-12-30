@@ -1,7 +1,11 @@
 from dataclasses import dataclass
+from datetime import datetime, timezone, timedelta
 from typing import Any
 import pandas as pd
 import vectorbt as vbt
+from plotly import graph_objs as go, express as px
+from cryptocomp.helpers import load_prediction_data, load_price_data
+from model.container import ModelContainer
 
 
 @dataclass
@@ -87,3 +91,38 @@ def get_simple_entries_exits(prediction, price_data, clamp_buys=8, clamp_sells=6
             exits.append(False)
 
     return pd.Series(entries, index=price_data.index), pd.Series(exits, index=price_data.index)
+
+
+def simulate_strategy(model: ModelContainer, prediction_length=100, buy_range=22,
+                      sell_range=32, folds=10, predict_forward=False, plot=False):
+    data = []
+    prediction = load_prediction_data(model, prediction_length, predict_forward, plot)
+
+    for fold in range(folds):
+        print(f'Generating: {fold * 100 // folds}%', end='\r')
+        start = datetime(2021, 4, 9, tzinfo=timezone.utc) + timedelta(days=10*fold)
+        end = start + timedelta(days=prediction_length - 1)
+        price = load_price_data(f'{start:%Y-%m-%d UTC}', f'{end:%Y-%m-%d UTC}', 'ETH-USD', timeframe='daily')
+
+        for buys in range(buy_range):
+            for sells in range(sell_range):
+                entries, exits = get_simple_entries_exits(prediction, price, clamp_buys=buys, clamp_sells=sells)
+                neural = NeuralStrategy(price, entries, exits)
+                returns = round(neural.portfolio.total_return(), 2)
+                if folds == 1 or returns > 1:
+                    data.append((buys, sells, returns, fold))
+
+    data = pd.DataFrame(data, columns=['Buy_threshold', 'Sell_threshold', 'Total_Return', 'Fold'])
+
+    if folds == 1:
+        fig = go.Figure(data=go.Heatmap(z=data['Total_Return'], x=data['Buy_threshold'],
+                        y=data['Sell_threshold'], colorscale='Viridis', text=data['Total_Return']))
+        fig.update_layout(title='Total Returns by Buy and Sell thresholds',
+                          xaxis_title="Buy_threshold", yaxis_title="Sell_threshold",
+                          font=dict(family="Verdana", size=20))
+        fig.update_traces(text=data['Total_Return'], texttemplate="%{text}")
+    else:
+        fig = px.scatter_3d(data, x='Buy_threshold', y='Sell_threshold', z='Fold', color='Total_Return')
+
+    fig.show()
+    return data
