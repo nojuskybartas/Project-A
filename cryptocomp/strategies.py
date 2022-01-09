@@ -4,8 +4,8 @@ from typing import Any
 import pandas as pd
 import vectorbt as vbt
 from plotly import graph_objs as go, express as px
-from cryptocomp.helpers import load_prediction_data, load_price_data
-from model.container import ModelContainer
+from cryptocomp.helpers import load_price_data
+from model.model import Model
 
 
 @dataclass
@@ -93,16 +93,17 @@ def get_simple_entries_exits(prediction, price_data, clamp_buys=8, clamp_sells=6
     return pd.Series(entries, index=price_data.index), pd.Series(exits, index=price_data.index)
 
 
-def simulate_strategy(model: ModelContainer, prediction_length=100, buy_range=22,
+def simulate_strategy(model: Model, prediction_length=100, buy_range=22,
                       sell_range=32, folds=10, predict_forward=False, plot=False):
     data = []
-    prediction = load_prediction_data(model, prediction_length, predict_forward, plot)
+    prediction = model.predict(prediction_length, predict_forward, plot=plot)
 
     for fold in range(folds):
         print(f'Generating: {fold * 100 // folds}%', end='\r')
         start = datetime(2021, 4, 9, tzinfo=timezone.utc) + timedelta(days=10*fold)
         end = start + timedelta(days=prediction_length - 1)
-        price = load_price_data(f'{start:%Y-%m-%d UTC}', f'{end:%Y-%m-%d UTC}', 'ETH-USD', timeframe='daily')
+        price = load_price_data(f'{start:%Y-%m-%d UTC}', f'{end:%Y-%m-%d UTC}', 'ETH-USD',
+                                timeframe=model.config.TIMEFRAME)
 
         for buys in range(buy_range):
             for sells in range(sell_range):

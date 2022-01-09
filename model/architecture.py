@@ -11,8 +11,8 @@ if os.name == 'nt':
         os.add_dll_directory(loaddir)
         logging.info('Found!')
 
-    except Exception as e:
-        logging.info(f'CUDA not found, this gon be slow af \n{e}')
+    except Exception as ex:
+        logging.info(f'CUDA not found, this gon be slow af \n{ex}')
 
 import shutil
 import json
@@ -117,7 +117,7 @@ def build(window_len, input_columns, output_size, neurons, activ_func='linear',
 
 def save(model, history, config):
     model_json = model.to_json()
-    with open(f"{config.CURRENCY}_pred_model.json", "w") as json_file:
+    with open(f"{config.SYMBOL}_pred_model.json", "w") as json_file:
         json_file.write(model_json)
 
     if history is not None:
@@ -130,10 +130,10 @@ def save(model, history, config):
     with open(os.path.join(path, 'params.json'), 'w') as json_file:
         json.dump(params, json_file)
     os.rename("history.npy", os.path.join(path, "history.npy"))
-    os.rename(f"{config.CURRENCY}_pred_model.json", os.path.join(
-        path, f"{config.CURRENCY}_pred_model.json"))
+    os.rename(f"{config.SYMBOL}_pred_model.json", os.path.join(
+        path, f"{config.SYMBOL}_pred_model.json"))
     os.rename("pred_model_weights.hdf5", os.path.join(
-        path, f"{config.CURRENCY}_pred_model_weights.hdf5"))
+        path, f"{config.SYMBOL}_pred_model_weights.hdf5"))
     logging.info(f'Trained model successfully saved to {path}')
 
 

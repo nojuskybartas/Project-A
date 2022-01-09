@@ -1,3 +1,2 @@
 - we now have access to hourly data, perhaps we need to adapt the modelpackage class to hourly data (so now we have extra 23 data points for each day)
-- we need to create a recursive predictor that can create a prediction for X days using only data from the relative past
 - the hourly predictor uses hourly data as output as well, meaning we predict hourly price, and we want to predict the daily price.

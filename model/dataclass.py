@@ -1,6 +1,7 @@
-import pickle
 import pandas as pd
 import logging
+from model.settings import ModelSettings
+from cryptocomp.helpers import load_price_data
 
 
 def extract_window_data(data, window_len):
@@ -16,22 +17,23 @@ def train_test_split(df, test_size=0.2):
     return train_data, test_data
 
 
+def augment(df):
+    d = list(df['Close'])
+    df['dayChange'] = [0]+[d[i+1] - v for i, v in enumerate(d) if v is not d[-1]]
+    df['dayPercentChange'] = [0]+[(100 * d[i+1] / v) - 100 for i, v in enumerate(d) if v is not d[-1]]
+    return df
+
+
 class DataClass:
-    def __init__(self, data_filename, window_len, test_size=0.2, debug=False):
-        with open(data_filename, 'rb') as f:
-            self.df = pd.DataFrame(pickle.load(f))
+    def __init__(self, config: ModelSettings, debug=False):
+        self.train_data = load_price_data(config.TRAIN_DATES[0], config.TRAIN_DATES[1], config.SYMBOL, config.TIMEFRAME)
+        self.test_data = load_price_data(config.TEST_DATES[0], config.TEST_DATES[1], config.SYMBOL, config.TIMEFRAME)
 
-        d = list(self.df['Close'])
-        self.df['dayChange'] = [0]+[d[i+1] - v for i, v in enumerate(d) if v is not d[-1]]
-        self.df['dayPercentChange'] = [0]+[(100 * d[i+1] / v) - 100 for i, v in enumerate(d) if v is not d[-1]]
+        self.y_train = self.train_data.iloc[config.WINDOW_LEN:]
+        self.x_train = extract_window_data(self.train_data, config.WINDOW_LEN)
 
-        self.train_data, self.test_data = train_test_split(self.df, test_size=test_size)
-
-        self.y_train = self.train_data.iloc[window_len:]
-        self.x_train = extract_window_data(self.train_data, window_len)
-
-        self.y_test = self.test_data.iloc[window_len:]
-        self.x_test = extract_window_data(self.test_data, window_len)
+        self.y_test = self.test_data.iloc[config.WINDOW_LEN:]
+        self.x_test = extract_window_data(self.test_data, config.WINDOW_LEN)
 
         logging.info(f"Train Data: {self.y_train.index[0]} ------ {self.y_train.index[-1]}")
         logging.info(f"Test Data: {self.y_test.index[0]} ------ {self.y_test.index[-1]}")
